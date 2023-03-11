@@ -1,5 +1,6 @@
 import { Container, Typography } from "@mui/material";
 import ApplicationsTable from "./components/ApplicationsTable";
+import ML from "./components/ML";
 import RunApplicationData from "./components/RunApplicationData";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         program.
       </Typography>
       <ApplicationsTable />
+      <ML />
       <RunApplicationData />
     </Container>
   );

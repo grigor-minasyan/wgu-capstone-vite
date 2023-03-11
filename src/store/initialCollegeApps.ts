@@ -1,4 +1,4 @@
-import { CollegeApp } from "./types";
+import { CollegeApp } from "../types";
 
 export const initialCollegeApps: CollegeApp[] = [
   {

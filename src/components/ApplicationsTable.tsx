@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
-import LinearProgress from "@mui/material/LinearProgress";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-import { initialCollegeApps } from "../initialCollegeApps";
+import { useAppState } from "../store/store";
 import { CollegeApp } from "../types";
 
 const columns: GridColDef<CollegeApp>[] = [
@@ -57,10 +56,11 @@ const columns: GridColDef<CollegeApp>[] = [
 ];
 
 export default function ApplicationsTable() {
+  const apps = useAppState((state) => state.collegeApps);
   return (
     <Box sx={{ height: 400, width: "100%", my: 2, py: 2 }}>
       <DataGrid
-        rows={initialCollegeApps}
+        rows={apps}
         columns={columns}
         initialState={{
           pagination: {
