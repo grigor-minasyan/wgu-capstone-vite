@@ -5,4 +5,4 @@ export const MAX_SOP = 5;
 export const MAX_LOR = 5;
 export const MAX_GPA = 10;
 
-export const MAX_EPOCH = 30;
+export const MAX_EPOCH = 100;

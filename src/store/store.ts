@@ -26,6 +26,8 @@ interface AppState {
     slider: keyof AppState["sliders"],
     value: number | number[]
   ) => void;
+  predictedChance: number;
+  setPredictedChance: (value: number) => void;
 }
 
 export const useAppState = create<AppState>()(
@@ -46,6 +48,8 @@ export const useAppState = create<AppState>()(
           set((state) => ({
             sliders: { ...state.sliders, [slider]: Number(value) },
           })),
+        predictedChance: 0,
+        setPredictedChance: (value) => set({ predictedChance: value }),
       }),
       {
         name: "bear-storage",
