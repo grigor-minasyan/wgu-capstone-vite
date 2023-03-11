@@ -1,53 +1,49 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import * as tf from "@tensorflow/tfjs";
-import { useEffect } from "react";
 import { useAppState } from "../store/store";
 import { collegeAppToTrainingData } from "../utils";
 
 export default function ML() {
   const collegeApps = useAppState((state) => state.collegeApps);
-  console.time("ML");
-  const tx = tf.tensor2d(collegeApps.map(collegeAppToTrainingData));
-  const ty = tf.tensor(collegeApps.map((c) => c.chance));
-  tx.print();
-  ty.print();
+  const xs = tf.tensor2d(collegeApps.map(collegeAppToTrainingData));
+  const ys = tf.tensor2d(collegeApps.map((c) => [c.chance]));
+
+  const [xTrain, xTest] = tf.split(xs, 2);
+  const [yTrain, yTest] = tf.split(ys, 2);
+
   const model = tf.sequential();
-  model.add(
-    tf.layers.dense({
-      inputShape: [tx.shape[1]],
-      units: tx.shape[1],
-      activation: "relu",
-    })
-  );
 
   model.add(
-    tf.layers.dense({
-      units: 1,
-      activation: "softmax",
-    })
+    tf.layers.dense({ units: 16, activation: "sigmoid", inputShape: [7] })
   );
-  model.compile({
-    optimizer: tf.train.adam(0.1),
-    loss: "binaryCrossentropy",
-    metrics: ["accuracy"],
-  });
-  console.timeEnd("ML");
+  model.add(tf.layers.dense({ units: 1, activation: "sigmoid" }));
+  model.compile({ optimizer: "adam", loss: "binaryCrossentropy" });
 
   const onTrain = async () => {
-    console.log("Training ML");
-    await model.fit(tx, ty, {
-      shuffle: true,
-      epochs: 20,
+    await model.fit(xTrain, yTrain, {
+      epochs: 30,
+      validationData: [xTest, yTest],
       callbacks: {
         onEpochEnd: async (epoch, logs) => {
-          console.log("Epoch " + epoch);
-          console.log("Loss: " + logs?.loss + " accuracy: " + logs?.acc);
+          console.log("Epoch " + epoch + " Loss: " + logs?.loss);
         },
       },
     });
 
-    console.log("Training ML end");
+    const loss = model.evaluate(xTest, yTest);
+    if (!Array.isArray(loss)) {
+      console.log("loss", loss.dataSync()[0].toFixed(4));
+    }
+    const newChances = model.predict(
+      tf.tensor2d([[1, 0.2, 0.1, 0.1, 0.1, 1, 1]])
+    );
+
+    if (!Array.isArray(newChances)) {
+      console.log(
+        `Chances of admission: ${newChances.dataSync()[0].toFixed(4)}`
+      );
+    }
   };
 
   return (
