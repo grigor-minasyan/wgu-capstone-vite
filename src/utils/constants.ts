@@ -6,3 +6,4 @@ export const MAX_LOR = 5;
 export const MAX_GPA = 10;
 
 export const MAX_EPOCH = 100;
+export const MAX_CHART_SIZE = 50;

@@ -7,7 +7,7 @@ export const MLModelProvider = ({ children }: { children: ReactNode }) => {
   const model = tf.sequential();
 
   model.add(
-    tf.layers.dense({ units: 16, activation: "sigmoid", inputShape: [7] })
+    tf.layers.dense({ units: 32, activation: "relu", inputShape: [7] })
   );
   model.add(tf.layers.dense({ units: 1, activation: "sigmoid" }));
   model.compile({ optimizer: "adam", loss: "binaryCrossentropy" });

@@ -32,10 +32,11 @@ export default function RunApplicationData() {
     const newChances = model.predict(
       tf.tensor2d([
         collegeAppToTrainingData({
-          ...sliders,
           id: 1,
           chance: 0,
+          ...sliders,
           researchExp: Boolean(sliders.researchExp),
+          [key]: value,
         }),
       ])
     );
